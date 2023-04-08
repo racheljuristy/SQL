@@ -1,0 +1,22 @@
+--Create a clothing store database
+
+CREATE TABLE store (id INTEGER PRIMARY KEY, item TEXT, brand TEXT, quantity INTEGER, price INTEGER); 
+
+INSERT INTO store 
+VALUES
+(1, "pants", "Levi", 12, 20), 
+(2, "tshirt", "Uniqlo", 10, 20),
+(3, "jeans", "levi", 10, 50), 
+(4, "sports bra", "GF Collective", 10, 20),
+(5, "underwear", "aerie", 10, 8), 
+(6, "boxers", "uniqlo", 10, 10), 
+(7, "long sleeve", "aerie", 10, 20),
+(8, "socks", "Old Navy", 12, 3), 
+(9, "sunglasses", "Warby Parker", 13, 100);
+
+
+--display price and the name of item from database, ordered by price
+SELECT price, item FROM store ORDER BY price;
+
+--what items and brands are more than 10 dollars?
+SELECT price, item, brand FROM store WHERE price > 10; 
