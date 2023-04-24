@@ -1,0 +1,59 @@
+#In this project, I'm querying a database containing multiple dables with information related to monthly customer orders and customer data.  
+#The queries performed are to quantify statistics about customers and order data, and were executed in SQLite Studio RDBMS.  
+
+-- #1 How many orders were placed in January? 
+SELECT COUNT (orderID) 
+FROM BIT_DB.JanSales
+WHERE length(orderID) = 6
+AND OrderID <> 'Order ID';
+
+
+-- #2 How many of those orders were for an iPhone? 
+SELECT COUNT (Product) 
+FROM BIT_DB.JanSales
+WHERE Product = 'iPhone';
+
+
+-- #3 Select the customer account numbers for all the orders placed in February 
+SELECT distinct customers.acctnum
+FROM customers 
+INNER JOIN FebSales
+ON customers.order_id = FebSales.orderID
+WHERE length(orderID) = 6
+AND OrderID <> 'Order ID';
+
+
+-- #4 Which Product was the cheapest one sold in Jan, and what was the price? 
+SELECT distinct Product
+FROM JanSales
+WHERE price in 
+(SELECT min(price) 
+FROM BIT_db.JanSales);
+
+
+-- #5 What is the total revenue for each product sold in Jan? (use the number of products sold and price of products) 
+SELECT SUM(JanSales.Quantity)* JanSales.price as rev, product
+FROM BIT_DB.JanSales
+GROUP BY Product;
+
+
+-- #6 Which products were sold in Feb at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue? 
+SELECT 
+SUM (Quantity),
+SUM (FebSales.Quantity) * FebSales.price as rev,
+Product
+FROM BIT_DB.FebSales
+WHERE location = '548 Lincoln St, Seattle, WA 98101'
+GROUP BY Product;
+
+
+-- #7 How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers? 
+SELECT COUNT(distinct cust.acctnum),
+AVG(quantity)*price
+FROM BIT_DB.FebSales Feb
+
+LEFT JOIN BIT_DB.customers cust 
+ON Feb.orderID = cust.order_id
+WHERE Feb.Quantity>2 
+AND length(orderid) = 6
+AND orderid <> 'Order ID';
